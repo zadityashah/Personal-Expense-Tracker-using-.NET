@@ -1,0 +1,45 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/obj/Debug/net8.0-android/scopedcss/bundle/PersonalExpenseTracker.styles.css",
+      "PackagePath": "staticwebassets/PersonalExpenseTracker.styles.css"
+    },
+    {
+      "Id": "/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/wwwroot/css/app.css",
+      "PackagePath": "staticwebassets/css/app.css"
+    },
+    {
+      "Id": "/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/wwwroot/css/bootstrap/bootstrap.min.css",
+      "PackagePath": "staticwebassets/css/bootstrap/bootstrap.min.css"
+    },
+    {
+      "Id": "/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/wwwroot/css/bootstrap/bootstrap.min.css.map",
+      "PackagePath": "staticwebassets/css/bootstrap/bootstrap.min.css.map"
+    },
+    {
+      "Id": "/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/wwwroot/favicon.png",
+      "PackagePath": "staticwebassets/favicon.png"
+    },
+    {
+      "Id": "/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/wwwroot/index.html",
+      "PackagePath": "staticwebassets/index.html"
+    },
+    {
+      "Id": "obj/Debug/net8.0-android/staticwebassets/msbuild.PersonalExpenseTracker.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0-android/staticwebassets/msbuild.build.PersonalExpenseTracker.props",
+      "PackagePath": "build\\PersonalExpenseTracker.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0-android/staticwebassets/msbuild.buildMultiTargeting.PersonalExpenseTracker.props",
+      "PackagePath": "buildMultiTargeting\\PersonalExpenseTracker.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0-android/staticwebassets/msbuild.buildTransitive.PersonalExpenseTracker.props",
+      "PackagePath": "buildTransitive\\PersonalExpenseTracker.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
