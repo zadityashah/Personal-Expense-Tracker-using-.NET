@@ -1,0 +1,159 @@
+@page "/debt"
+@using PersonalExpenseTracker.DataModel.Model
+@using PersonalExpenseTracker.DataAccess.Services.Interface
+@inject ITransactionService TransactionService
+@inject NavigationManager NavManager
+
+<link href="css/homeStyle.css" rel="stylesheet" />
+
+<h3>Unpaid Debts</h3>
+
+<div class="form-group">
+    <label for="titleFilter">Search by Title</label>
+    <InputText id="titleFilter" class="form-control" @bind-Value="titleFilter" placeholder="Enter title" />
+</div>
+
+<div class="form-group">
+    <label for="startDateFilter">Start Date</label>
+    <InputDate id="startDateFilter" class="form-control" @bind-Value="startDateFilter" />
+</div>
+
+<div class="form-group">
+    <label for="endDateFilter">End Date</label>
+    <InputDate id="endDateFilter" class="form-control" @bind-Value="endDateFilter" />
+</div>
+
+<button class="btn btn-primary" @onclick="ApplyFilters">Apply Filters</button>
+
+<table class="table table-striped mt-3">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Amount</th>
+        <th>Due Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var debt in filteredDebts)
+    {
+        <tr>
+            <td>@debt.title</td>
+            <td>@debt.amount</td>
+            <td>@debt.duedate?.ToString("yyyy-MM-dd")</td>
+            <td>@debt.status</td>
+            <td>
+                <button class="btn btn-success" @onclick="() => PayDebt(debt.transactionId)">Pay</button>
+                <button class="btn btn-danger" @onclick="() => DeleteDebt(debt.transactionId)">Delete</button>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@if (showNotification)
+{
+    <div class="alert alert-success mt-3" role="alert">
+        @notificationMessage
+    </div>
+}
+
+@if (showErrorNotification)
+{
+    <div class="alert alert-danger mt-3" role="alert">
+        Insufficient balance to pay the debt.
+    </div>
+}
+
+@code {
+    private string titleFilter = string.Empty;
+    private DateTime? startDateFilter = null;
+    private DateTime? endDateFilter = null;
+    private List<Transaction> allDebts = new List<Transaction>();
+    private List<Transaction> filteredDebts = new List<Transaction>();
+    private double balance;
+    private bool showNotification = false; // Controls the success notification
+    private bool showErrorNotification = false; // Controls the error notification
+    private string notificationMessage = string.Empty; // Message for success notification
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDebts();
+        balance = await TransactionService.GetBalance();
+    }
+
+    private async Task LoadDebts()
+    {
+        var debts = await TransactionService.GetAllTransactions();
+        allDebts = debts.Where(d => d.transactionType == TransactionType.debt && d.status == "unpaid").ToList();
+        filteredDebts = allDebts;
+    }
+
+    private void ApplyFilters()
+    {
+        filteredDebts = allDebts;
+
+        if (!string.IsNullOrWhiteSpace(titleFilter))
+        {
+            filteredDebts = filteredDebts.Where(d => d.title.Contains(titleFilter, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        if (startDateFilter.HasValue)
+        {
+            filteredDebts = filteredDebts.Where(d => d.duedate >= startDateFilter.Value).ToList();
+        }
+
+        if (endDateFilter.HasValue)
+        {
+            filteredDebts = filteredDebts.Where(d => d.duedate <= endDateFilter.Value).ToList();
+        }
+    }
+
+    private async Task PayDebt(Guid transactionId)
+    {
+        var success = await TransactionService.PayDebt(transactionId);
+
+        if (success)
+        {
+            notificationMessage = "Debt paid successfully.";
+            showNotification = true;
+            await LoadDebts();
+        }
+        else
+        {
+            showErrorNotification = true;
+        }
+
+        // Hide notifications after 3 seconds
+        _ = Task.Delay(3000).ContinueWith(async _ =>
+        {
+            await InvokeAsync(() =>
+            {
+                showNotification = false;
+                showErrorNotification = false;
+            });
+        });
+    }
+
+    private async Task DeleteDebt(Guid transactionId)
+    {
+        var success = await TransactionService.DeleteTransaction(transactionId);
+
+        if (success)
+        {
+            notificationMessage = "Debt deleted successfully.";
+            showNotification = true;
+            await LoadDebts();
+        }
+
+        // Hide notifications after 3 seconds
+        _ = Task.Delay(3000).ContinueWith(async _ =>
+        {
+        await InvokeAsync(() =>
+        {
+        showNotification = false;
+        });
+        });
+    }
+}

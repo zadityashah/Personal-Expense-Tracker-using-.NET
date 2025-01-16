@@ -1,0 +1,234 @@
+@page "/credit-debit"
+@using PersonalExpenseTracker.DataModel.Model
+@using PersonalExpenseTracker.DataAccess.Services.Interface
+@using System.Globalization
+
+<h1>Credit and Debit Transactions</h1>
+
+<h3>Balance: @balance</h3>
+
+<div class="row">
+    <div class="col-md-6">
+        <!-- Search and Date Filters -->
+        <input type="text" class="form-control mb-3" placeholder="Search by Title" @bind="searchQuery" />
+
+        <input type="date" class="form-control mb-3" @bind="startDate" />
+
+        <input type="date" class="form-control mb-3" @bind="endDate" />
+
+        <!-- Search Button -->
+        <button class="btn btn-primary mt-3" @onclick="OnSearchClick">Search</button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    @if (filteredTransactions.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var transaction in filteredTransactions)
+            {
+                <tr class="@GetTransactionClass(transaction)">
+                    <td>@transaction.title</td>
+                    <td>@transaction.date.ToShortDateString()</td>
+                    <td>@transaction.amount</td>
+                    <td>
+                        <button class="btn btn-danger" @onclick="() => DeleteTransaction(transaction.transactionId)">Delete</button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No transactions found based on the applied filters.</p>
+    }
+</div>
+
+<style>
+    /* General styling for the page */
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    h3 {
+        text-align: center;
+        color: #555;
+        margin-bottom: 30px;
+    }
+
+    .row {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    /* Table styling */
+    .table {
+        margin-top: 20px;
+        width: 100%;
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .table-success {
+        background-color: #d4edda !important; /* Light green for credit transactions */
+    }
+
+    .table-danger {
+        background-color: #f8d7da !important; /* Light red for debit transactions */
+    }
+
+    th, td {
+        text-align: center;
+        padding: 12px;
+        vertical-align: middle;
+    }
+
+    th {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+    }
+
+    /* Buttons */
+    .btn {
+        display: inline-block;
+        padding: 10px 15px;
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    .btn-danger:hover {
+        background-color: #bd2130;
+    }
+
+    /* Input fields */
+    .form-control {
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        width: 100%;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+    }
+
+    /* Responsive table */
+    .table-responsive {
+        overflow-x: auto;
+        margin: 20px auto;
+        max-width: 90%;
+    }
+
+    p {
+        text-align: center;
+        color: #666;
+        margin-top: 20px;
+    }
+</style>
+
+@code {
+    private List<Transaction> allTransactions = new List<Transaction>();
+    private List<Transaction> filteredTransactions = new List<Transaction>();
+    private double balance = 0.0;
+    private string searchQuery = string.Empty;
+    private DateTime? startDate;
+    private DateTime? endDate;
+
+    [Inject] public ITransactionService transactionService { get; set; }
+
+    // Load transactions on page initialization
+    protected override async Task OnInitializedAsync()
+    {
+        allTransactions = await transactionService.GetAllTransactions();
+
+        // Filter transactions to exclude debt transactions
+        FilterTransactions();
+        balance = await transactionService.GetBalance();
+    }
+
+    // Delete a transaction by its ID
+    private async Task DeleteTransaction(Guid transactionId)
+    {
+        var success = await transactionService.DeleteTransaction(transactionId);
+        if (success)
+        {
+            allTransactions = await transactionService.GetAllTransactions();
+            FilterTransactions();
+        }
+        else
+        {
+            Console.WriteLine("Error: Transaction not found or could not be deleted.");
+        }
+    }
+
+    // Filter transactions based on title, startDate, and endDate
+    private void FilterTransactions()
+    {
+        filteredTransactions = allTransactions
+            .Where(t => (t.transactionType == TransactionType.credit || t.transactionType == TransactionType.debit) && // Include only credit and debit
+                        (string.IsNullOrEmpty(searchQuery) || t.title.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)) &&
+                        (!startDate.HasValue || t.date >= startDate) &&
+                        (!endDate.HasValue || t.date <= endDate))  // Apply AND logic between filters
+            .OrderByDescending(t => t.date) // Sort by most recent
+            .ToList();
+    }
+
+    // Method triggered by the Search button click
+    private void OnSearchClick()
+    {
+        FilterTransactions();  // Apply search filters
+    }
+
+    // Helper method to determine the row color based on transaction type (credit = green, debit = red)
+    private string GetTransactionClass(Transaction transaction)
+    {
+        return transaction.transactionType switch
+        {
+            TransactionType.credit => "table-success", // Green for Credit
+            TransactionType.debit => "table-danger",   // Red for Debit
+            _ => ""
+        };
+    }
+}

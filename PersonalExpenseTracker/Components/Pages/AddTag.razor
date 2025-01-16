@@ -1,0 +1,57 @@
+@page "/add-tag"
+@using PersonalExpenseTracker.DataModel.Model
+@inject NavigationManager Navigation
+@inject ITagService TagService
+
+<link href="css/homeStyle.css" rel="stylesheet" />
+
+<h3>Add Tag</h3>
+
+<div class="form-group">
+    <label for="tagName">Tag Name:</label>
+    <input type="text" id="tagName" class="form-control" @bind="tagName" placeholder="Enter tag name" />
+</div>
+
+<button class="btn btn-primary mt-3" @onclick="SubmitTag">Add Tag</button>
+
+@if (successMessage != null)
+{
+    <div class="alert alert-success mt-3">@successMessage</div>
+}
+@if (errorMessage != null)
+{
+    <div class="alert alert-danger mt-3">@errorMessage</div>
+}
+
+@code {
+    private string tagName = string.Empty;
+    private string? successMessage = null;
+    private string? errorMessage = null;
+
+    // Method to handle adding a tag
+    private async Task SubmitTag()
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(tagName))
+            {
+                errorMessage = "Tag name cannot be empty.";
+                successMessage = null;
+                return;
+            }
+
+            var newTag = new Tag(tagName);
+            await TagService.AddTag(newTag);
+
+            successMessage = "Tag added successfully!";
+            errorMessage = null;
+            tagName = string.Empty; // Clear input after success
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred while adding the tag.";
+            successMessage = null;
+            Console.WriteLine(ex.Message);
+        }
+    }
+}

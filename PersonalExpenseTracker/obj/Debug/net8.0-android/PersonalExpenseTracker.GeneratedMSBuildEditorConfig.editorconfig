@@ -3,6 +3,9 @@ build_property.EnableAotAnalyzer =
 build_property.EnableSingleFileAnalyzer = true
 build_property.EnableTrimAnalyzer = false
 build_property.IncludeAllContentForSelfExtract = 
+build_property.MudDebugAnalyzer = 
+build_property.MudAllowedAttributePattern = 
+build_property.MudIllegalParameters = 
 build_property.TargetFramework = net8.0-android
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = 
@@ -13,72 +16,114 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = PersonalExpenseTracker
 build_property.RootNamespace = PersonalExpenseTracker
-build_property.ProjectDir = /Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/
+build_property.ProjectDir = /Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = /Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker
+build_property.MSBuildProjectDirectory = /Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker
 build_property._RazorSourceGeneratorDebug = 
 
-[/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/App.xaml]
+[/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/App.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = PersonalExpenseTracker.App.xaml
 build_metadata.AdditionalFiles.TargetPath = App.xaml
 build_metadata.AdditionalFiles.RelativePath = App.xaml
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/MainPage.xaml]
+[/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/MainPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = PersonalExpenseTracker.MainPage.xaml
 build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
 build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/Components/Pages/Counter.razor]
+[/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/Components/Pages/AddTag.razor]
 build_metadata.AdditionalFiles.GenKind = 
 build_metadata.AdditionalFiles.ManifestResourceName = 
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Db3VudGVyLnJhem9y
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BZGRUYWcucmF6b3I=
 build_metadata.AdditionalFiles.RelativePath = 
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/Components/Pages/Home.razor]
+[/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/Components/Pages/AddTransaction.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BZGRUcmFuc2FjdGlvbi5yYXpvcg==
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/Components/Pages/Credit_Debit.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9DcmVkaXRfRGViaXQucmF6b3I=
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/Components/Pages/Dashboard.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9EYXNoYm9hcmQucmF6b3I=
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/Components/Pages/Debt.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9EZWJ0LnJhem9y
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/Components/Pages/Home.razor]
 build_metadata.AdditionalFiles.GenKind = 
 build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ib21lLnJhem9y
 build_metadata.AdditionalFiles.RelativePath = 
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/Components/Pages/Weather.razor]
+[/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/Components/Pages/Index.razor]
 build_metadata.AdditionalFiles.GenKind = 
 build_metadata.AdditionalFiles.ManifestResourceName = 
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9XZWF0aGVyLnJhem9y
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9JbmRleC5yYXpvcg==
 build_metadata.AdditionalFiles.RelativePath = 
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/Components/Routes.razor]
+[/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/Components/Pages/Login.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Mb2dpbi5yYXpvcg==
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/Components/Pages/TransactionHistory.razor]
+build_metadata.AdditionalFiles.GenKind = 
+build_metadata.AdditionalFiles.ManifestResourceName = 
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9UcmFuc2FjdGlvbkhpc3RvcnkucmF6b3I=
+build_metadata.AdditionalFiles.RelativePath = 
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/Components/Routes.razor]
 build_metadata.AdditionalFiles.GenKind = 
 build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9Sb3V0ZXMucmF6b3I=
 build_metadata.AdditionalFiles.RelativePath = 
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/Components/_Imports.razor]
+[/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/Components/_Imports.razor]
 build_metadata.AdditionalFiles.GenKind = 
 build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9fSW1wb3J0cy5yYXpvcg==
 build_metadata.AdditionalFiles.RelativePath = 
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/Components/Layout/MainLayout.razor]
+[/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/Components/Layout/MainLayout.razor]
 build_metadata.AdditionalFiles.GenKind = 
 build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9MYXlvdXQvTWFpbkxheW91dC5yYXpvcg==
 build_metadata.AdditionalFiles.RelativePath = 
 build_metadata.AdditionalFiles.CssScope = b-lsakagrz9n
 
-[/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/Components/Layout/NavMenu.razor]
+[/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/Components/Layout/NavMenu.razor]
 build_metadata.AdditionalFiles.GenKind = 
 build_metadata.AdditionalFiles.ManifestResourceName = 
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9MYXlvdXQvTmF2TWVudS5yYXpvcg==

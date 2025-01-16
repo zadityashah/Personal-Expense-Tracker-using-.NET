@@ -1,0 +1,107 @@
+@page "/add-transaction"
+@using PersonalExpenseTracker.DataModel.Model
+
+<link href="css/homeStyle.css" rel="stylesheet" />
+
+<h3>Add Transaction</h3>
+
+<EditForm Model="@transaction" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="date">Date</label>
+        <InputDate id="date" class="form-control" @bind-Value="transaction.date" />
+    </div>
+
+    <div class="form-group">
+        <label for="transactionType">Transaction Type</label>
+        <InputSelect id="transactionType" class="form-control" @bind-Value="transaction.transactionType">
+            <option value="credit">Credit</option>
+            <option value="debit">Debit</option>
+            <option value="debt">Debt</option>
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label for="title">Title</label>
+        <InputText id="title" class="form-control" @bind-Value="transaction.title" />
+    </div>
+
+    <div class="form-group">
+        <label for="amount">Amount</label>
+        <InputNumber id="amount" class="form-control" @bind-Value="transaction.amount" />
+    </div>
+    <div class="form-group">
+        <label for="notes">Notes</label>
+        <InputTextArea id="notes" class="form-control" @bind-Value="transaction.notes" />
+    </div>
+
+    @if (transaction.transactionType == TransactionType.debt)
+    {
+        <div class="form-group">
+            <label for="dueDate">Due Date</label>
+            <InputDate id="dueDate" class="form-control" @bind-Value="transaction.duedate" />
+        </div>
+    }
+
+    <div class="form-group">
+        <label for="tag">Tag</label>
+        <InputSelect id="tag" class="form-control" @bind-Value="transaction.tagId">
+            <option value="">Select a Tag</option>
+            @foreach (var tag in tags)
+            {
+                <option value="@tag.TagID">@tag.TagName</option>
+            }
+        </InputSelect>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Add Transaction</button>
+
+    @if (showError)
+    {
+        <div class="alert alert-danger mt-3">
+            @errorMessage
+        </div>
+    }
+</EditForm>
+
+<button class="btn btn-secondary mt-3" @onclick="NavigateBack">Back</button>
+
+@code {
+    private Transaction transaction = new Transaction { date = DateTime.Now };
+    private List<Tag> tags = new List<Tag>();
+    private bool showError = false;
+    private string errorMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tags = await TagService.GetAllTags();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        var success = await TransactionService.AddTransaction(transaction);
+
+        if (!success && transaction.transactionType == TransactionType.debit)
+        {
+            showError = true;
+            errorMessage = "Insufficient balance for this debit transaction.";
+        }
+        else
+        {
+            Nav.NavigateTo("/home");
+        }
+    }
+
+    private void NavigateBack()
+    {
+        Nav.NavigateTo("/home");
+    }
+
+    private void NavigateToAddTag()
+    {
+        Nav.NavigateTo("/add-tag");
+    }
+}
+

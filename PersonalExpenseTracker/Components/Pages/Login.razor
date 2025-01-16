@@ -1,0 +1,42 @@
+@page "/login"
+@using PersonalExpenseTracker.DataModel.Model
+<link href="css/loginStyle.css" rel="stylesheet" />
+
+<div class="form-login">
+    <form class="text-center" @onsubmit="HandleLogin">
+        <img class="mb-4" src="/appicon.png" alt="" height="72">
+        <h1 class="h3 mb-3 fw-normal">Please Login</h1>
+
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" @bind="Users.Username" placeholder="Username" />
+            <label for="floatingInput">Username</label>
+        </div>
+
+        <!-- Password Input -->
+        <div class="form-floating mb-3">
+            <input type="password" class="form-control" @bind="Users.Password" placeholder="Password" />
+            <label for="floatingPassword">Password</label>
+        </div>
+
+        <!-- Currency Dropdown -->
+        <div class="form-floating mb-3">
+            <label for="currencyDropdown">Select Currency</label>
+            <br>
+            <select id="currencyDropdown" name="selectedCurrency" class="form-control">
+                @foreach (var currency in Currency.GetAvailableCurrencies())
+                {
+                    <option value="@currency.CurrencyID">@currency.CurrencyName</option>
+                }
+            </select>
+        </div>
+
+        @if (!string.IsNullOrEmpty(ErrorMessage))
+        {
+            <div class="alert alert-danger">@ErrorMessage</div>
+        }
+        <button class="btn btn-lg btn-primary">
+            Login
+        </button>
+
+    </form>
+</div>

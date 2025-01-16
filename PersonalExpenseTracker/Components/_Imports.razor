@@ -1,5 +1,6 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
+@using PersonalExpenseTracker.DataAccess.Services.Interface
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
@@ -7,3 +8,13 @@
 @using Microsoft.JSInterop
 @using PersonalExpenseTracker
 @using PersonalExpenseTracker.Components
+
+
+@inject IUserService UserService
+
+
+@inject NavigationManager Nav
+
+@inject ITransactionService TransactionService
+
+@inject ITagService TagService

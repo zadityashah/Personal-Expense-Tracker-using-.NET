@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/PersonalExpenseTracker.csproj": {}
+    "/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/PersonalExpenseTracker.csproj": {}
   },
   "projects": {
-    "/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/PersonalExpenseTracker.csproj": {
+    "/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/PersonalExpenseTracker.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/PersonalExpenseTracker.csproj",
+        "projectUniqueName": "/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/PersonalExpenseTracker.csproj",
         "projectName": "PersonalExpenseTracker",
-        "projectPath": "/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/PersonalExpenseTracker.csproj",
+        "projectPath": "/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/PersonalExpenseTracker.csproj",
         "packagesPath": "/Users/hexagon/.nuget/packages/",
-        "outputPath": "/Users/hexagon/RiderProjects/PersonalExpenseTracker/PersonalExpenseTracker/obj/",
+        "outputPath": "/Users/hexagon/Downloads/PersonalExpenseTracker/PersonalExpenseTracker/obj/",
         "projectStyle": "PackageReference",
         "crossTargeting": true,
         "UsingMicrosoftNETSdk": false,
@@ -74,8 +74,12 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.8, )",
+              "version": "[8.0.11, )",
               "autoReferenced": true
+            },
+            "MudBlazor": {
+              "target": "Package",
+              "version": "[8.0.0-rc.2, )"
             }
           },
           "imports": [
@@ -91,20 +95,24 @@
           "warn": true,
           "downloadDependencies": [
             {
-              "name": "Microsoft.NETCore.App.Runtime.Mono.android-arm",
-              "version": "[8.0.11, 8.0.11]"
+              "name": "Microsoft.Android.Ref.34",
+              "version": "[34.0.145, 34.0.145]"
             },
             {
-              "name": "Microsoft.NETCore.App.Runtime.Mono.android-arm64",
-              "version": "[8.0.11, 8.0.11]"
+              "name": "Microsoft.Android.Runtime.34.android-arm",
+              "version": "[34.0.145, 34.0.145]"
             },
             {
-              "name": "Microsoft.NETCore.App.Runtime.Mono.android-x64",
-              "version": "[8.0.11, 8.0.11]"
+              "name": "Microsoft.Android.Runtime.34.android-arm64",
+              "version": "[34.0.145, 34.0.145]"
             },
             {
-              "name": "Microsoft.NETCore.App.Runtime.Mono.android-x86",
-              "version": "[8.0.11, 8.0.11]"
+              "name": "Microsoft.Android.Runtime.34.android-x64",
+              "version": "[34.0.145, 34.0.145]"
+            },
+            {
+              "name": "Microsoft.Android.Runtime.34.android-x86",
+              "version": "[34.0.145, 34.0.145]"
             }
           ],
           "frameworkReferences": {
@@ -115,7 +123,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/Users/hexagon/.dotnet/sdk/8.0.401/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.404/PortableRuntimeIdentifierGraph.json"
         },
         "net8.0-ios18.0": {
           "targetAlias": "net8.0-ios",
@@ -139,8 +147,12 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.8, )",
+              "version": "[8.0.11, )",
               "autoReferenced": true
+            },
+            "MudBlazor": {
+              "target": "Package",
+              "version": "[8.0.0-rc.2, )"
             }
           },
           "imports": [
@@ -154,6 +166,16 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.iOS.Ref.net8.0_18.0",
+              "version": "[18.0.8319, 18.0.8319]"
+            },
+            {
+              "name": "Microsoft.iOS.Runtime.iossimulator-arm64.net8.0_18.0",
+              "version": "[18.0.8319, 18.0.8319]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.iOS": {
               "privateAssets": "all"
@@ -162,7 +184,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/Users/hexagon/.dotnet/sdk/8.0.401/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.404/PortableRuntimeIdentifierGraph.json"
         },
         "net8.0-maccatalyst18.0": {
           "targetAlias": "net8.0-maccatalyst",
@@ -186,8 +208,12 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.8, )",
+              "version": "[8.0.11, )",
               "autoReferenced": true
+            },
+            "MudBlazor": {
+              "target": "Package",
+              "version": "[8.0.0-rc.2, )"
             }
           },
           "imports": [
@@ -202,6 +228,16 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.MacCatalyst.Ref.net8.0_18.0",
+              "version": "[18.0.8319, 18.0.8319]"
+            },
+            {
+              "name": "Microsoft.MacCatalyst.Runtime.maccatalyst-arm64.net8.0_18.0",
+              "version": "[18.0.8319, 18.0.8319]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.MacCatalyst": {
               "privateAssets": "all"
@@ -210,7 +246,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/Users/hexagon/.dotnet/sdk/8.0.401/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.404/PortableRuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {

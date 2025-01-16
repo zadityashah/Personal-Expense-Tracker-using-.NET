@@ -1,5 +1,329 @@
-﻿@page "/"
+@page "/home"
+@using PersonalExpenseTracker.DataModel.Model
+@using PersonalExpenseTracker.DataAccess.Services.Interface
+@inject NavigationManager Navigation
+@using MudBlazor
 
-<h1>Hello, world!</h1>
+<link href="css/homeStyle.css" rel="stylesheet" />
 
-Welcome to your new app.
+<h1>Transactions</h1>
+
+<h3>Balance: @balance</h3>
+
+<div class="row">
+    <!-- Recent Transactions (Credit and Debit) -->
+    <div class="col-md-4">
+        <h3>Recent Transactions</h3>
+        @if (recentTransactions.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Notes</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var transaction in recentTransactions)
+                {
+                    <tr class="@GetTransactionClass(transaction)">
+                        <td>@transaction.title</td>
+                        <td>@transaction.date.ToShortDateString()</td>
+                        <td>@transaction.amount</td>
+                        <td>@transaction.notes</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            <button class="btn btn-primary" @onclick="NavigateToCreditDebit">View All</button>
+        }
+        else
+        {
+            <p>No recent transactions available.</p>
+        }
+    </div>
+
+    <!-- Pending Debts -->
+    <div class="col-md-4">
+        <h3>Pending Debts</h3>
+        @if (debtTransactions.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Due Date</th>
+                    <th>Notes</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var transaction in debtTransactions)
+                {
+                    <tr class="table-warning">
+                        <td>@transaction.title</td>
+                        <td>@transaction.date.ToShortDateString()</td>
+                        <td>@transaction.amount</td>
+                        <td>@transaction.duedate?.ToShortDateString()</td>
+                        <td>@transaction.notes</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            <button class="btn btn-primary" @onclick="NavigateToDebtPage">View All</button>
+        }
+        else
+        {
+            <p>No pending debts available.</p>
+        }
+    </div>
+
+    <!-- Paid Debts -->
+    <div class="col-md-4">
+        <h3>Paid Debts</h3>
+        @if (paidDebts.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Due Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var debt in paidDebts)
+                {
+                    <tr>
+                        <td>@debt.title</td>
+                        <td>@debt.duedate?.ToString("yyyy-MM-dd")</td>
+                        <td>@debt.amount</td>
+                        <td>@debt.status</td>
+                        <td>
+                            <button class="btn btn-danger" @onclick="() => RemovePaidDebt(debt.transactionId)">Remove</button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No paid debts available.</p>
+        }
+    </div>
+
+    <!-- Inserted Row: Total Metrics (Count and Sum of Amounts) -->
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <h4>Total Inflows</h4>
+            <p>Count: @TotalInflowsCount</p>
+            <p>Amount: @TotalInflowsAmount</p>
+        </div>
+        <div class="col-md-3">
+            <h4>Total Outflows</h4>
+            <p>Count: @TotalOutflowsCount</p>
+            <p>Amount: @TotalOutflowsAmount</p>
+        </div>
+        <div class="col-md-3">
+            <h4>Pending Debt</h4>
+            <p>Count: @PendingDebtCount</p>
+            <p>Amount: @PendingDebtAmount</p>
+        </div>
+        <div class="col-md-3">
+            <h4>Paid Debt</h4>
+            <p>Count: @PaidDebtCount</p>
+            <p>Amount: @PaidDebtAmount</p>
+        </div>
+    </div>
+
+
+</div>
+
+<!-- Row with Donut Chart for Transaction Metrics (Credit, Debit, Cleared Debt, Remaining Debt) -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h3>Transaction Metrics</h3>
+        @if (data.Any())
+        {
+            <MudPaper Class="pa-4">
+                <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" @bind-SelectedIndex="Index" InputData="@data" InputLabels="@labels" />
+            </MudPaper>
+        }
+        else
+        {
+            <p>No transaction data available for the chart.</p>
+        }
+    </div>
+</div>
+
+<!-- Row with Pie Chart for Top 5 Highest Transactions -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h3>Top 5 Highest Transactions</h3>
+        @if (topTransactionAmounts.Any())
+        {
+            <MudPaper Class="pa-4">
+                <MudChart ChartType="ChartType.Pie" Width="300px" Height="300px" @bind-SelectedIndex="Index" InputData="@topTransactionAmounts" InputLabels="@topTransactionLabels" />
+            </MudPaper>
+        }
+        else
+        {
+            <p>No top transactions available for the chart.</p>
+        }
+    </div>
+</div>
+
+@code {
+    private int Index = -1; // Default value for selected index
+    private double[] data; // Transaction metric data (Credit, Debit, Cleared Debt, Remaining Debt)
+    private string[] labels = { "Credit", "Debit", "Cleared Debt", "Remaining Debt" }; // Labels for the donut chart
+
+    private List<Transaction> recentTransactions = new List<Transaction>();
+    private List<Transaction> debtTransactions = new List<Transaction>();
+    private List<Transaction> paidDebts = new List<Transaction>();
+    private List<Transaction> topTransactions = new List<Transaction>(); // For top transactions pie chart
+    private double balance;
+    private double[] topTransactionAmounts = Array.Empty<double>();
+    private string[] topTransactionLabels = Array.Empty<string>();
+
+    // New properties for dynamically calculated metrics (counts and amounts)
+    private int TotalInflowsCount { get; set; }
+    private double TotalInflowsAmount { get; set; }
+    private int TotalOutflowsCount { get; set; }
+    private double TotalOutflowsAmount { get; set; }
+    private int PendingDebtCount { get; set; }
+    private double PendingDebtAmount { get; set; }
+    private int PaidDebtCount { get; set; }
+    private double PaidDebtAmount { get; set; }
+
+    [Inject] public ITransactionService transactionService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await FilterTransactionsForLastMonth();
+        recentTransactions = result.RecentTransactions;
+        debtTransactions = result.DebtTransactions;
+        balance = result.Balance;
+
+        // Load paid debts
+        var allTransactions = await transactionService.GetAllTransactions();
+        paidDebts = allTransactions.Where(t => t.transactionType == TransactionType.debt && t.status == "Paid").ToList();
+
+        // Prepare the transaction metrics for the donut chart
+        int credit = allTransactions.Count(t => t.transactionType == TransactionType.credit);
+        int debit = allTransactions.Count(t => t.transactionType == TransactionType.debit);
+        int clearedDebt = allTransactions.Count(t => t.transactionType == TransactionType.debt && t.status == "Paid");
+        int remainingDebt = allTransactions.Count(t => t.transactionType == TransactionType.debt && t.status == "unpaid");
+
+        data = new double[] { credit, debit, clearedDebt, remainingDebt };
+
+        // Calculate counts and amounts for the inserted row
+        TotalInflowsCount = allTransactions
+            .Count(t => t.transactionType == TransactionType.credit || (t.transactionType == TransactionType.debt && t.status == "unpaid"));
+        TotalInflowsAmount = allTransactions
+            .Where(t => t.transactionType == TransactionType.credit || (t.transactionType == TransactionType.debt && t.status == "unpaid"))
+            .Sum(t => t.amount);
+
+        TotalOutflowsCount = allTransactions
+            .Count(t => t.transactionType == TransactionType.debit || (t.transactionType == TransactionType.debt && t.status == "Paid"));
+        TotalOutflowsAmount = allTransactions
+            .Where(t => t.transactionType == TransactionType.debit || (t.transactionType == TransactionType.debt && t.status == "Paid"))
+            .Sum(t => t.amount);
+
+        PendingDebtCount = allTransactions
+            .Count(t => t.transactionType == TransactionType.debt && t.status == "unpaid");
+        PendingDebtAmount = allTransactions
+            .Where(t => t.transactionType == TransactionType.debt && t.status == "unpaid")
+            .Sum(t => t.amount);
+
+        PaidDebtCount = allTransactions
+            .Count(t => t.transactionType == TransactionType.debt && t.status == "Paid");
+        PaidDebtAmount = allTransactions
+            .Where(t => t.transactionType == TransactionType.debt && t.status == "Paid")
+            .Sum(t => t.amount);
+
+        // Prepare data for the pie chart (Top 5 Highest Transactions)
+        var topTransactionsList = allTransactions
+            .Where(t => t.transactionType != TransactionType.debt) // Exclude debt transactions
+            .OrderByDescending(t => t.amount) // Sort by amount descending
+            .Take(5) // Get the top 5
+            .ToList();
+
+        topTransactions = topTransactionsList;
+        topTransactionAmounts = topTransactionsList.Select(t => t.amount).ToArray();
+        topTransactionLabels = topTransactionsList.Select(t => t.title).ToArray();
+    }
+
+    public async Task<(List<Transaction> RecentTransactions, List<Transaction> DebtTransactions, double Balance)> FilterTransactionsForLastMonth()
+    {
+        var oneMonthAgo = DateTime.Now.AddMonths(-1); // Calculate date for 1 month ago
+        var allTransactions = await transactionService.GetAllTransactions();
+
+        // Filter credit and debit transactions for the last month
+        var recentTransactions = allTransactions
+            .Where(t => (t.transactionType == TransactionType.credit || t.transactionType == TransactionType.debit) &&
+                        t.date >= oneMonthAgo &&
+                        !(t.title?.StartsWith("Debt Payment:") ?? false)) // Safely handle null titles
+            .OrderByDescending(t => t.date) // Sort by the most recent date
+            .ToList();
+
+        // Filter debt transactions for the last month and "unpaid" status
+        var debtTransactions = allTransactions
+            .Where(t => t.transactionType == TransactionType.debt &&
+                        t.status == "unpaid" &&
+                        t.date >= oneMonthAgo) // Filter for the last month
+            .ToList();
+
+        // Get the current balance
+        var balance = await transactionService.GetBalance();
+
+        // Return all results as a tuple
+        return (recentTransactions, debtTransactions, balance);
+    }
+
+    // Method to get the class for styling based on transaction type (credit = green, debit = red)
+    private string GetTransactionClass(Transaction transaction)
+    {
+        return transaction.transactionType switch
+        {
+            TransactionType.credit => "table-success", // Green for Credit
+            TransactionType.debit => "table-danger",   // Red for Debit
+            _ => ""
+        };
+    }
+
+    // Method to navigate to the Credit-Debit page
+    private void NavigateToCreditDebit()
+    {
+        Navigation.NavigateTo("/credit-debit");
+    }
+
+    // Method to navigate to the Debts page
+    private void NavigateToDebtPage()
+    {
+        Navigation.NavigateTo("/debt");
+    }
+
+    private async Task RemovePaidDebt(Guid transactionId)
+    {
+        var success = await transactionService.DeleteTransaction(transactionId);
+
+        if (success)
+        {
+            // Refresh the list after removing a debt
+            var allTransactions = await transactionService.GetAllTransactions();
+            paidDebts = allTransactions.Where(t => t.transactionType == TransactionType.debt && t.status == "Paid").ToList();
+        }
+        else
+        {
+            // Handle failure (e.g., transaction not found)
+            Console.WriteLine("Failed to remove paid debt.");
+        }
+    }
+}

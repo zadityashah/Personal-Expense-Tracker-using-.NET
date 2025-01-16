@@ -1,27 +1,71 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">PersonalExpenseTracker</a>
+﻿@using DataModel.Model
+
+
+<div class="sidebar">
+    <NavLink class="nav-link" href="/home">Dashboard</NavLink>
+    <NavLink class="nav-link" href="/add-transaction">Add Transaction</NavLink>
+    <NavLink class="nav-link" href="/add-tag">Add tag</NavLink>
+    
+    <button class="nav-link btn btn-link" @onclick="ConfirmLogout">Log Out</button>
+</div>
+
+@if (showLogoutConfirmation)
+{
+    <div class="logout-confirmation-overlay">
+        <div class="logout-confirmation-dialog">
+            <p>Are you sure you want to log out?</p>
+            <button class="btn btn-danger" @onclick="Logout">Yes</button>
+            <button class="btn btn-secondary" @onclick="CancelLogout">No</button>
+        </div>
     </div>
-</div>
+}
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+@code {
+    private bool showLogoutConfirmation = false;
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
-</div>
+    
+    private void ConfirmLogout()
+    {
+        showLogoutConfirmation = true;
+    }
+
+    
+    private void CancelLogout()
+    {
+        showLogoutConfirmation = false;
+    }
+
+    
+    private void Logout()
+    {
+        showLogoutConfirmation = false;  
+        Nav.NavigateTo("/login", true);  
+    }
+}
+
+<style>
+    .logout-confirmation-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .logout-confirmation-dialog {
+        background: white;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+        .logout-confirmation-dialog button {
+            margin: 5px;
+        }
+</style>
